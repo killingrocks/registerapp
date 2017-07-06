@@ -8,6 +8,7 @@ import edu.uark.uarkregisterapp.models.api.interfaces.PathElementInterface;
 public enum ProductApiMethod implements PathElementInterface {
 	NONE(""),
 	PRODUCT("product"),
+	TRANSACTION("transaction"),
 	BY_LOOKUP_CODE("byLookupCode"),
 	PRODUCTS("products");
 

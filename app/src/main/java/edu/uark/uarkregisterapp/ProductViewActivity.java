@@ -53,30 +53,20 @@ public class ProductViewActivity extends AppCompatActivity {
 		super.onResume();
 
 		this.getProductLookupCodeEditText().setText(this.productTransition.getLookupCode());
+		this.getProductFirstNameEditText().setText(this.productTransition.getFirstname());
 		this.getProductCountEditText().setText(String.format(Locale.getDefault(), "%d", this.productTransition.getCount()));
 		this.getProductCreatedOnEditText().setText(
 			(new SimpleDateFormat("MM/dd/yyyy", Locale.US)).format(this.productTransition.getCreatedOn())
 		);
 	}
 
-	public void saveButtonOnClick(View view) {
-		if (!this.validateInput()) {
-			return;
-		}
 
-		this.savingProductAlert = new AlertDialog.Builder(this).
-			setMessage(R.string.alert_dialog_product_save).
-			create();
-
-		(new SaveActivityTask(
-			this,
-			this.getProductLookupCodeEditText().getText().toString(),
-			Integer.parseInt(this.getProductCountEditText().getText().toString())
-		)).execute();
-	}
 
 	private EditText getProductLookupCodeEditText() {
 		return (EditText) this.findViewById(R.id.edit_text_product_lookup_code);
+	}
+	private EditText getProductFirstNameEditText(){
+		return (EditText) this.findViewById(R.id.edit_text_product_first_name);
 	}
 
 	private EditText getProductCountEditText() {
@@ -87,6 +77,24 @@ public class ProductViewActivity extends AppCompatActivity {
 		return (EditText) this.findViewById(R.id.edit_text_product_created_on);
 	}
 
+
+	public void saveButtonOnClick(View view) {
+		if (!this.validateInput()) {
+			return;
+		}
+
+		this.savingProductAlert = new AlertDialog.Builder(this).
+				setMessage(R.string.alert_dialog_product_save).
+				create();
+
+		(new SaveActivityTask(
+				this,
+				this.getProductLookupCodeEditText().getText().toString(),
+				this.getProductFirstNameEditText().getText().toString(),
+				Integer.parseInt(this.getProductCountEditText().getText().toString())
+		)).execute();
+	}
+
 	private class SaveActivityTask extends AsyncTask<Void, Void, Boolean> {
 		@Override
 		protected Boolean doInBackground(Void... params) {
@@ -94,12 +102,14 @@ public class ProductViewActivity extends AppCompatActivity {
 				(new Product()).
 					setId(productTransition.getId()).
 					setLookupCode(this.lookupCode).
+					setFirstName(this.firstname).
 					setCount(this.count)
 			);
 
 			if (product.getApiRequestStatus() == ProductApiRequestStatus.OK) {
 				productTransition.setCount(this.count);
 				productTransition.setLookupCode(this.lookupCode);
+				productTransition.setFirstName(this.firstname);
 			}
 
 			return (product.getApiRequestStatus() == ProductApiRequestStatus.OK);
@@ -133,12 +143,14 @@ public class ProductViewActivity extends AppCompatActivity {
 
 		private int count;
 		private String lookupCode;
+		private String firstname;
 		private ProductViewActivity activity;
 
-		private SaveActivityTask(ProductViewActivity activity, String lookupCode, int count) {
+		private SaveActivityTask(ProductViewActivity activity, String lookupCode, String firstname, int count) {
 			this.count = count;
 			this.activity = activity;
 			this.lookupCode = lookupCode;
+			this.firstname = firstname;
 		}
 	}
 

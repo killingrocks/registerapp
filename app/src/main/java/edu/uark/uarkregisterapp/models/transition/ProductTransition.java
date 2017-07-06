@@ -14,35 +14,41 @@ import edu.uark.uarkregisterapp.models.api.Product;
 
 public class ProductTransition implements Parcelable {
 	private UUID id;
+	private String lookupCode;
+	private String firstname;
+	private int count;
+	private Date createdOn;
+
 	public UUID getId() {
 		return this.id;
 	}
+	public String getLookupCode() {
+		return this.lookupCode;
+	}
+	public String getFirstname() {return this.firstname;}
+	public int getCount() {
+		return this.count;
+	}
+	public Date getCreatedOn() {
+		return this.createdOn;
+	}
+
 	public ProductTransition setId(UUID id) {
 		this.id = id;
 		return this;
-	}
-
-	private String lookupCode;
-	public String getLookupCode() {
-		return this.lookupCode;
 	}
 	public ProductTransition setLookupCode(String lookupCode) {
 		this.lookupCode = lookupCode;
 		return this;
 	}
-
-	private int count;
-	public int getCount() {
-		return this.count;
-	}
-	public ProductTransition setCount(int count) {
-		this.count = count;
+	public ProductTransition setFirstName (String firstname){
+		this.firstname = firstname;
 		return this;
 	}
 
-	private Date createdOn;
-	public Date getCreatedOn() {
-		return this.createdOn;
+	public ProductTransition setCount(int count) {
+		this.count = count;
+		return this;
 	}
 	public ProductTransition setCreatedOn(Date createdOn) {
 		this.createdOn = createdOn;
@@ -53,6 +59,7 @@ public class ProductTransition implements Parcelable {
 	public void writeToParcel(Parcel destination, int flags) {
 		destination.writeByteArray((new UUIDToByteConverterCommand()).setValueToConvert(this.id).execute());
 		destination.writeString(this.lookupCode);
+		destination.writeString(this.firstname);
 		destination.writeInt(this.count);
 		destination.writeLong(this.createdOn.getTime());
 	}
@@ -77,6 +84,7 @@ public class ProductTransition implements Parcelable {
 		this.id = new UUID(0, 0);
 		this.createdOn = new Date();
 		this.lookupCode = StringUtils.EMPTY;
+		this.firstname = StringUtils.EMPTY;
 	}
 
 	public ProductTransition(Product product) {
@@ -84,11 +92,13 @@ public class ProductTransition implements Parcelable {
 		this.count = product.getCount();
 		this.createdOn = product.getCreatedOn();
 		this.lookupCode = product.getLookupCode();
+		this.firstname = product.getFirstName();
 	}
 
 	public ProductTransition(Parcel productTransitionParcel) {
 		this.id = (new ByteToUUIDConverterCommand()).setValueToConvert(productTransitionParcel.createByteArray()).execute();
 		this.lookupCode = productTransitionParcel.readString();
+		this.firstname = productTransitionParcel.readString();
 		this.count = productTransitionParcel.readInt();
 
 		this.createdOn = new Date();
