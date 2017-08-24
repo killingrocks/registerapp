@@ -1,5 +1,7 @@
 package edu.uark.uarkregisterapp.models.api;
 
+import android.util.Log;
+
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,7 +52,7 @@ public class Product implements ConvertToJsonInterface, LoadFromJsonInterface<Pr
 	@Override
 	public JSONObject convertToJson() {
 		JSONObject jsonObject = new JSONObject();
-
+Log.d(TAG, "IN PRODUCT json [First name :" + getFirstName()+"]");
 		try {
 			jsonObject.put(ProductFieldName.ID.getFieldName(), this.id.toString());
 			jsonObject.put(ProductFieldName.LOOKUP_CODE.getFieldName(), this.lookupCode);
@@ -61,16 +63,17 @@ public class Product implements ConvertToJsonInterface, LoadFromJsonInterface<Pr
 			jsonObject.put(ProductFieldName.API_REQUEST_STATUS.getFieldName(), this.apiRequestStatus.name());
 		} catch (JSONException e) {
 			e.printStackTrace();
+			Log.d(TAG, "THERE WAS AN ERROR");
 		}
 
 		return jsonObject;
 	}
 
 	public Product() {
-		this.count = -1;
+		this.id = new UUID(0, 0);
 		this.lookupCode = "";
 		this.firstname = "";
-		this.id = new UUID(0, 0);
+		this.count = -1;
 		this.createdOn = new Date();
 		this.apiRequestMessage = StringUtils.EMPTY;
 		this.apiRequestStatus = ProductApiRequestStatus.OK;
@@ -78,21 +81,22 @@ public class Product implements ConvertToJsonInterface, LoadFromJsonInterface<Pr
 
 	public Product(ProductTransition productTransition) {
 		this.id = productTransition.getId();
-		this.count = productTransition.getCount();
-		this.apiRequestMessage = StringUtils.EMPTY;
-		this.createdOn = productTransition.getCreatedOn();
-		this.apiRequestStatus = ProductApiRequestStatus.OK;
 		this.lookupCode = productTransition.getLookupCode();
 		this.firstname = productTransition.getFirstname();
+		this.count = productTransition.getCount();
+		this.createdOn = productTransition.getCreatedOn();
+		this.apiRequestMessage = StringUtils.EMPTY;
+		this.apiRequestStatus = ProductApiRequestStatus.OK;
 	}
 
+	private static final String TAG = Product.class.getSimpleName();
 	private UUID id;
 	private String lookupCode;
 	private String firstname;
 	private int count;
 	private Date createdOn;
-	private ProductApiRequestStatus apiRequestStatus;
 	private String apiRequestMessage;
+	private ProductApiRequestStatus apiRequestStatus;
 
 	public UUID getId() {
 		return this.id;
@@ -107,11 +111,11 @@ public class Product implements ConvertToJsonInterface, LoadFromJsonInterface<Pr
 	public Date getCreatedOn() {
 		return this.createdOn;
 	}
-	public ProductApiRequestStatus getApiRequestStatus() {
-		return this.apiRequestStatus;
-	}
 	public String getApiRequestMessage() {
 		return this.apiRequestMessage;
+	}
+	public ProductApiRequestStatus getApiRequestStatus() {
+		return this.apiRequestStatus;
 	}
 
 	public Product setId(UUID id) {
@@ -134,17 +138,17 @@ public class Product implements ConvertToJsonInterface, LoadFromJsonInterface<Pr
 		this.createdOn = createdOn;
 		return this;
 	}
-	public Product setApiRequestStatus(ProductApiRequestStatus apiRequestStatus) {
-		if (this.apiRequestStatus != apiRequestStatus) {
-			this.apiRequestStatus = apiRequestStatus;
-		}
-		return this;
-	}
 	public Product setApiRequestMessage(String apiRequestMessage) {
 		if (!StringUtils.equalsIgnoreCase(this.apiRequestMessage, apiRequestMessage)) {
 			this.apiRequestMessage = apiRequestMessage;
 		}
 
+		return this;
+	}
+	public Product setApiRequestStatus(ProductApiRequestStatus apiRequestStatus) {
+		if (this.apiRequestStatus != apiRequestStatus) {
+			this.apiRequestStatus = apiRequestStatus;
+		}
 		return this;
 	}
 

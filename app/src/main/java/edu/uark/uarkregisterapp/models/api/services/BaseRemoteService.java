@@ -1,5 +1,7 @@
 package edu.uark.uarkregisterapp.models.api.services;
 
+import android.util.Log;
+
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,6 +18,7 @@ import java.util.UUID;
 import edu.uark.uarkregisterapp.models.api.interfaces.PathElementInterface;
 
 public abstract class BaseRemoteService {
+	private static final String TAG = BaseRemoteService.class.getSimpleName();
 	protected JSONObject requestSingle(PathElementInterface[] pathElements) {
 		return this.requestSingle(pathElements, StringUtils.EMPTY);
 	}
@@ -90,17 +93,21 @@ public abstract class BaseRemoteService {
 			httpURLConnection.addRequestProperty(CONTENT_TYPE_REQUEST_PROPERTY, JSON_PAYLOAD_TYPE);
 
 			OutputStream outputStream = httpURLConnection.getOutputStream();
+			Log.d(TAG,"jsonObject:   " + jsonObject.toString());
+			//print jsonObject.toString
 			outputStream.write(jsonObject.toString().getBytes(UTF8_CHARACTER_ENCODING));
 			outputStream.flush();
 
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
-
+			Log.d(TAG,"httpURLConnection :   " + httpURLConnection);
 			char[] buffer = new char[1024];
 			int readCharacters = bufferedReader.read(buffer, 0, buffer.length);
 			while (readCharacters > 0) {
 				rawResponse.append(buffer, 0, readCharacters);
 				readCharacters = bufferedReader.read(buffer, 0, buffer.length);
 			}
+			Log.d(TAG,"rawResponse:" + rawResponse.toString());
+			//print raw resp
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {

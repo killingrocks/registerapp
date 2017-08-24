@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -22,6 +23,7 @@ import edu.uark.uarkregisterapp.models.api.services.ProductService;
 import edu.uark.uarkregisterapp.models.transition.ProductTransition;
 
 public class ProductViewActivity extends AppCompatActivity {
+	private static final String TAG = ProductViewActivity.class.getSimpleName();
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -98,6 +100,7 @@ public class ProductViewActivity extends AppCompatActivity {
 	private class SaveActivityTask extends AsyncTask<Void, Void, Boolean> {
 		@Override
 		protected Boolean doInBackground(Void... params) {
+			Log.d(TAG, "SAVE ACTIVITY TASK [First name :" + this.firstname +"]");
 			Product product = (new ProductService()).putProduct(
 				(new Product()).
 					setId(productTransition.getId()).
@@ -151,6 +154,8 @@ public class ProductViewActivity extends AppCompatActivity {
 			this.activity = activity;
 			this.lookupCode = lookupCode;
 			this.firstname = firstname;
+
+			Log.d(TAG, "SAVE ACTIVITY TASK CONSTRUCTOR [First name :" + this.firstname +"]");
 		}
 	}
 

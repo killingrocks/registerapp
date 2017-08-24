@@ -14,6 +14,7 @@ import edu.uark.uarkregisterapp.models.api.enums.ProductApiRequestStatus;
 import edu.uark.uarkregisterapp.models.api.interfaces.PathElementInterface;
 
 public class ProductService extends BaseRemoteService {
+	private static final String TAG = ProductService.class.getSimpleName();
 	public Product getProduct(UUID productId) {
 		JSONObject rawJsonObject = this.requestSingle(
 			(new PathElementInterface[] { ProductApiMethod.TRANSACTION, ApiLevel.ONE }), productId

@@ -2,6 +2,7 @@ package edu.uark.uarkregisterapp.models.transition;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -13,6 +14,7 @@ import edu.uark.uarkregisterapp.commands.converters.UUIDToByteConverterCommand;
 import edu.uark.uarkregisterapp.models.api.Product;
 
 public class ProductTransition implements Parcelable {
+	private static final String TAG = ProductTransition.class.getSimpleName();
 	private UUID id;
 	private String lookupCode;
 	private String firstname;
@@ -25,7 +27,9 @@ public class ProductTransition implements Parcelable {
 	public String getLookupCode() {
 		return this.lookupCode;
 	}
-	public String getFirstname() {return this.firstname;}
+	public String getFirstname() {
+		Log.d(TAG, "PRODUCT TRANSITION {first name}="+ this.firstname);
+		return this.firstname;}
 	public int getCount() {
 		return this.count;
 	}
